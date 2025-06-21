@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billiards Score Control</title>
+    <link rel="stylesheet" href="control.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎱 Billiards Score Control</h1>
+        </header>
+
+        <section class="player-setup">
+            <h2>Player Setup</h2>
+            <div class="player-inputs">
+                <div class="player-input">
+                    <label for="player1-name">Player 1 Name:</label>
+                    <input type="text" id="player1-name" value="">
+                    <label for="player1-logo">Logo URL (optional):</label>
+                    <input type="url" id="player1-logo" placeholder="https://example.com/logo.png">
+                    <label for="player1-fargo">Fargo Rating (optional):</label>
+                    <input type="number" id="player1-fargo" placeholder="e.g. 650" min="0" max="1000">
+                </div>
+                <div class="player-input">
+                    <label for="player2-name">Player 2 Name:</label>
+                    <input type="text" id="player2-name" value="">
+                    <label for="player2-logo">Logo URL (optional):</label>
+                    <input type="url" id="player2-logo" placeholder="https://example.com/logo.png">
+                    <label for="player2-fargo">Fargo Rating (optional):</label>
+                    <input type="number" id="player2-fargo" placeholder="e.g. 650" min="0" max="1000">
+                </div>
+            </div>
+            <div class="race-to-section">
+                <label for="race-to">Race to:</label>
+                <input type="number" id="race-to" min="1" max="50" value="5">
+            </div>
+            <button id="update-match" class="btn btn-primary">Update Match</button>
+        </section>
+
+        <section class="score-control">
+            <h2>Score Control</h2>
+            <div class="score-controls">
+                <div class="player-score">
+                    <h3 id="player1-display"></h3>
+                    <div class="score-buttons">
+                        <button id="player1-minus" class="btn btn-score btn-danger">-</button>
+                        <div class="score-display" id="player1-score">0</div>
+                        <button id="player1-plus" class="btn btn-score btn-success">+</button>
+                    </div>
+                </div>
+                <div class="vs-divider">VS</div>
+                <div class="player-score">
+                    <h3 id="player2-display"></h3>
+                    <div class="score-buttons">
+                        <button id="player2-minus" class="btn btn-score btn-danger">-</button>
+                        <div class="score-display" id="player2-score">0</div>
+                        <button id="player2-plus" class="btn btn-score btn-success">+</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="reset-section">
+            <h2>Reset</h2>
+            <button id="reset-scores" class="btn btn-warning">Reset Scores</button>
+        </section>
+
+        <section class="overlay-link">
+            <h2>OBS Overlay</h2>
+            <p>Use this URL in OBS as a Browser Source:</p>
+            <div class="url-display">
+                <span id="overlay-url">http://localhost:3000/overlay</span>
+                <button id="copy-url" class="btn btn-secondary">Copy URL</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="reset-modal" class="modal">
+        <div class="modal-content">
+            <h3>Confirm Reset</h3>
+            <p>Are you sure you want to reset both scores to 0?</p>
+            <div class="modal-buttons">
+                <button id="confirm-reset" class="btn btn-danger">Yes, Reset</button>
+                <button id="cancel-reset" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="control.js"></script>
+</body>
+</html> 

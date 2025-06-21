@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billiards Score Overlay</title>
+    <link rel="stylesheet" href="overlay.css">
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="overlay-container">
+        <div class="score-bug">
+            <div class="player player1">
+                <img id="player1-logo" class="player-logo" style="display: none;" alt="Player 1 Logo">
+                <span id="player1-fargo" class="player-fargo" style="display: none;"></span>
+                <span id="player1-name"></span>
+                <span id="player1-score" class="score">0</span>
+            </div>
+            <div class="race-info">
+                <div id="race-to-display" class="race-to">Race to 5</div>
+            </div>
+            <div class="player player2">
+                <img id="player2-logo" class="player-logo" style="display: none;" alt="Player 2 Logo">
+                <span id="player2-fargo" class="player-fargo" style="display: none;"></span>
+                <span id="player2-name"></span>
+                <span id="player2-score" class="score">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="overlay.js"></script>
+</body>
+</html> 
