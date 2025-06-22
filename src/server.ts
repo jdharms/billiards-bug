@@ -2,24 +2,52 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import * as path from 'path';
-import { Database } from './database';
+import sea from 'node:sea';
+import { DatabaseManager } from './database';
 import { MatchUpdate, ScoreUpdate, ResetRequest, MatchBroadcast } from './types';
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
-const db = new Database();
+const db = new DatabaseManager();
 
 // Middleware
 app.use(express.json());
 
-// Determine static path based on whether we're running from source or compiled
-const isProduction = __filename.endsWith('.js');
-const staticPath = isProduction 
-  ? path.join(__dirname, 'public')
-  : path.join(__dirname, '..', 'dist', 'public');
+// Static asset serving from SEA
+function serveAsset(assetName: string, contentType: string) {
+  return (_req: express.Request, res: express.Response) => {
+    try {
+      if (sea.isSea()) {
+        // In SEA mode, serve from embedded assets
+        const asset = sea.getAsset(assetName, 'utf8');
+        res.setHeader('Content-Type', contentType);
+        res.send(asset);
+      } else {
+        // In development mode, serve from file system
+        const fs = require('fs');
+        const filePath = path.join(__dirname, 'public', assetName);
+        if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, 'utf8');
+          res.setHeader('Content-Type', contentType);
+          res.send(content);
+        } else {
+          res.status(404).send('Asset not found');
+        }
+      }
+    } catch (error) {
+      console.error(`Error serving asset ${assetName}:`, error);
+      res.status(404).send('Asset not found');
+    }
+  };
+}
 
-app.use(express.static(staticPath));
+// Static asset routes
+app.get('/control.css', serveAsset('control.css', 'text/css'));
+app.get('/control.js', serveAsset('control.js', 'application/javascript'));
+app.get('/overlay.css', serveAsset('overlay.css', 'text/css'));
+app.get('/overlay.js', serveAsset('overlay.js', 'application/javascript'));
+
 
 // Helper function to broadcast match updates
 async function broadcastMatch(): Promise<void> {
@@ -47,13 +75,9 @@ app.get('/', (_req, res) => {
   res.redirect('/control');
 });
 
-app.get('/control', async (_req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'control.html'));
-});
+app.get('/control', serveAsset('control.html', 'text/html'));
 
-app.get('/overlay', async (_req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'overlay.html'));
-});
+app.get('/overlay', serveAsset('overlay.html', 'text/html'));
 
 // API Routes
 app.get('/api/match', async (_req, res) => {
@@ -134,6 +158,7 @@ async function startServer(port: number): Promise<void> {
       console.log(`🎱 Billiards Bug server running on http://localhost:${port}`);
       console.log(`📊 Control interface: http://localhost:${port}/control`);
       console.log(`🎥 OBS overlay: http://localhost:${port}/overlay`);
+      console.log(`🔧 Running in SEA mode: ${sea.isSea()}`);
       resolve();
     }).on('error', (err: NodeJS.ErrnoException) => {
       if (err.code === 'EADDRINUSE') {

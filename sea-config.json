@@ -1,0 +1,14 @@
+{
+  "main": "dist/server-bundled.js",
+  "output": "dist/sea-prep.blob",
+  "disableExperimentalSEAWarning": true,
+  "useCodeCache": true,
+  "assets": {
+    "control.html": "dist/public/control.html",
+    "control.css": "dist/public/control.css",
+    "control.js": "dist/public/control.js",
+    "overlay.html": "dist/public/overlay.html",
+    "overlay.css": "dist/public/overlay.css",
+    "overlay.js": "dist/public/overlay.js"
+  }
+} 
