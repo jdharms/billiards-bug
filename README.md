@@ -9,7 +9,7 @@ A Node.js/TypeScript application that provides a web-based score control interfa
 - **OBS Overlay**: Transparent browser source for professional streaming
 - **Socket.IO Integration**: Real-time synchronization between control and overlay
 - **SQLite Database**: Persistent data storage with auto-initialization
-- **Single Executable**: Compiles to a standalone Windows .exe file
+- **Single Executable**: Compiles to a standalone executable for Windows and other platforms
 
 ## 🚀 Quick Start
 
@@ -43,7 +43,7 @@ A Node.js/TypeScript application that provides a web-based score control interfa
 
 3. **Create Windows Executable**
    ```bash
-   npm run pkg
+   npm run sea-build-windows
    ```
 
 ## 📋 API Endpoints
@@ -104,19 +104,23 @@ The server will automatically try ports 3000, 3001, 3002, etc. if the default po
 
 ```
 billiards-bug/
-├── server.ts              # Main Express server
-├── database.ts            # SQLite database operations
-├── types.ts               # TypeScript type definitions
-├── public/
-│   ├── control.html       # Control interface
-│   ├── overlay.html       # OBS overlay
-│   ├── control.css        # Control interface styles
-│   ├── overlay.css        # Overlay styles
-│   ├── control.ts         # Control interface logic
-│   ├── overlay.ts         # Overlay logic
-│   └── uploads/           # Logo upload directory
+├── src/
+│   ├── server.ts          # Main Express server
+│   ├── database.ts        # SQLite database operations
+│   ├── types.ts           # TypeScript type definitions
+│   └── public/
+│       ├── control.html   # Control interface
+│       ├── overlay.html   # OBS overlay
+│       ├── control.css    # Control interface styles
+│       ├── overlay.css    # Overlay styles
+│       ├── control.ts     # Control interface logic
+│       └── overlay.ts     # Overlay logic
+├── scripts/
+│   └── download-windows-node.sh  # Windows Node.js download script
 ├── dist/                  # Compiled JavaScript files
-└── package.json           # Dependencies and scripts
+├── sea-config.json        # SEA build configuration
+├── package.json           # Dependencies and scripts
+└── tsconfig.json          # TypeScript configuration
 ```
 
 ## 🛠️ Technologies Used
@@ -126,7 +130,7 @@ billiards-bug/
 - **Framework**: Express.js
 - **Real-time**: Socket.IO
 - **Database**: SQLite3
-- **Packaging**: pkg
+- **Packaging**: Node.js SEA (Single Executable Application)
 - **Frontend**: Vanilla HTML/CSS/TypeScript
 
 ## 🎮 Usage
@@ -151,17 +155,39 @@ The application uses Socket.IO for real-time communication:
 
 ## 📦 Packaging
 
-The application can be packaged into a single Windows executable:
+The application can be packaged into a single executable using Node.js SEA (Single Executable Application):
+
+### Windows Executable
+
+1. **Download Windows Node.js Runtime** (if cross-compiling from non-Windows)
+   ```bash
+   npm run download-windows-node
+   ```
+
+2. **Build Windows Executable**
+   ```bash
+   npm run sea-build-windows
+   ```
+
+### Current Platform Executable
 
 ```bash
-npm run pkg
+npm run sea-build
 ```
 
-This creates a standalone .exe file in the `dist/` directory that includes:
+### Build for All Platforms
+
+```bash
+npm run sea-build-all
+```
+
+This creates a standalone executable in the `dist/` directory that includes:
 - Node.js runtime
 - All dependencies
 - Static assets
 - No installation required
+
+**Note**: Cross-platform builds require the target platform's Node.js runtime to be downloaded first.
 
 ## 🤝 Contributing
 
