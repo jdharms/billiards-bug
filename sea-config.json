@@ -9,6 +9,7 @@
     "control.js": "dist/public/control.js",
     "overlay.html": "dist/public/overlay.html",
     "overlay.css": "dist/public/overlay.css",
-    "overlay.js": "dist/public/overlay.js"
+    "overlay.js": "dist/public/overlay.js",
+    "socket.io.js": "node_modules/socket.io/client-dist/socket.io.min.js"
   }
 } 

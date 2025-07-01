@@ -8,7 +8,9 @@ import { MatchUpdate, ScoreUpdate, ResetRequest, MatchBroadcast } from './types'
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  serveClient: false  // Disable automatic client serving
+});
 const db = new DatabaseManager();
 
 // Middleware
@@ -26,7 +28,16 @@ function serveAsset(assetName: string, contentType: string) {
       } else {
         // In development mode, serve from file system
         const fs = require('fs');
-        const filePath = path.join(__dirname, 'public', assetName);
+        let filePath: string;
+        
+        if (assetName === 'socket.io.js') {
+          // Special handling for Socket.IO client in development
+          filePath = path.join(process.cwd(), 'node_modules/socket.io/client-dist/socket.io.min.js');
+        } else {
+          filePath = path.join(__dirname, 'public', assetName);
+        }
+        
+
         if (fs.existsSync(filePath)) {
           const content = fs.readFileSync(filePath, 'utf8');
           res.setHeader('Content-Type', contentType);
@@ -47,6 +58,7 @@ app.get('/control.css', serveAsset('control.css', 'text/css'));
 app.get('/control.js', serveAsset('control.js', 'application/javascript'));
 app.get('/overlay.css', serveAsset('overlay.css', 'text/css'));
 app.get('/overlay.js', serveAsset('overlay.js', 'application/javascript'));
+app.get('/assets/socket.io.js', serveAsset('socket.io.js', 'application/javascript'));
 
 
 // Helper function to broadcast match updates
